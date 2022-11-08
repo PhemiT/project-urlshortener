@@ -47,7 +47,7 @@ app.post('/api/shorturl', async (req, res) => {
   //check if url is valid
   if (!validUrl.isWebUri(url)) {
     res.status(401).json({
-      error: "invalid URL"
+      error: "invalid url"
     })
   } else {
     try {
@@ -78,15 +78,16 @@ app.post('/api/shorturl', async (req, res) => {
   }
 })
 
-app.get('/api/shorturl/:short_url?', async (req, res) => {
+app.get('/api/shorturl/:short_url', async (req, res) => {
   try {
-    const urlParams = URL.findOne({
+    const urlParams = await URL.findOne({
       short_url: req.params.short_url
     })
     if (urlParams) {
-      return res.redirect(urlParams.original_url)
+      console.log(urlParams)
+      res.redirect(urlParams.original_url)
     } else {
-      return res.status(404).json('URL not found')
+      res.status(404).json('URL not found')
     }
   } catch (err) {
     console.error(err)
