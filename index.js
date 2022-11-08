@@ -45,10 +45,9 @@ app.post('/api/shorturl', async (req, res) => {
   const urlCode = shortId.generate()
   
   //check if url is valid
-  if (!validUrl.isWebUri(url)) {
-    res.status(401).json({
-      error: "invalid url"
-    })
+  const httpRegex = /^(http|https)(:\/\/)/; 
+  if (!httpRegex.test(url)) {
+    return res.json({ error: 'invalid url' })
   } else {
     try {
       // check if url exist in database
